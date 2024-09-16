@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">LittleLemon</string>
     <string name="onboarding_prompt">Let\'s get to know you</string>
+    <string name="onboarding_information">Personal Information</string>
+    <string name="onboarding_firstname">First name</string>
+    <string name="onboarding_lastname">Last name</string>
+    <string name="onboarding_email">Email</string>
 </resources>

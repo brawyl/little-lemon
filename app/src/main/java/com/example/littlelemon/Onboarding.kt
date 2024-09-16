@@ -16,8 +16,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,7 +39,10 @@ import androidx.compose.ui.unit.sp
 import com.example.littlelemon.ui.theme.LittleLemonTheme
 
 @Composable
-fun Heading(image: Painter, description: String, modifier: Modifier = Modifier) {
+fun Onboarding(image: Painter, description: String, modifier: Modifier = Modifier) {
+    val karlaFontFamily = FontFamily(
+        Font(R.font.karla_regular, FontWeight.Normal)
+    )
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = modifier
@@ -64,9 +69,6 @@ fun Heading(image: Painter, description: String, modifier: Modifier = Modifier) 
                 .fillMaxHeight(0.18f)
                 .background(colorResource(id = R.color.primary_green))
         ) {
-            val karlaFontFamily = FontFamily(
-                Font(R.font.karla_regular, FontWeight.Normal)
-            )
             Text(
                 text = stringResource(id = R.string.onboarding_prompt),
                 fontSize = 25.sp,
@@ -74,7 +76,52 @@ fun Heading(image: Painter, description: String, modifier: Modifier = Modifier) 
                 textAlign = TextAlign.Center,
                 color = colorResource(id = R.color.highlight_white),
                 fontFamily = karlaFontFamily
+
             )
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.18f)
+                .padding(20.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.onboarding_information),
+                fontSize = 20.sp,
+                lineHeight = 20.sp,
+                color = colorResource(id = R.color.black),
+                fontFamily = karlaFontFamily,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp,0.dp)
+        ) {
+            Text(
+                text = stringResource(id = R.string.onboarding_firstname),
+                fontSize = 16.sp,
+                lineHeight = 16.sp,
+                color = colorResource(id = R.color.black),
+                textAlign = TextAlign.Left,
+                fontFamily = karlaFontFamily,
+                fontWeight = FontWeight.Bold
+            )
+        }
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp,5.dp)
+        ) {
+            OutlinedTextField(
+                value = "",
+                onValueChange = {},
+                modifier = Modifier
+                    .fillMaxWidth())
         }
     }
 }
@@ -83,6 +130,6 @@ fun Heading(image: Painter, description: String, modifier: Modifier = Modifier) 
 @Composable
 fun OnboardingPreview() {
     LittleLemonTheme {
-        Heading(painterResource(id = R.drawable.logo), "Little Lemon Logo")
+        Onboarding(painterResource(id = R.drawable.logo), "Little Lemon Logo")
     }
 }

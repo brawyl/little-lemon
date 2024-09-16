@@ -19,7 +19,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LittleLemonTheme {
-                Heading(painterResource(id = R.drawable.logo), "Little Lemon Logo")
+                Onboarding(painterResource(id = R.drawable.logo), "Little Lemon Logo")
             }
         }
     }
@@ -29,6 +29,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainPreview() {
     LittleLemonTheme {
-        Heading(painterResource(id = R.drawable.logo), "Little Lemon Logo")
+        Onboarding(painterResource(id = R.drawable.logo), "Little Lemon Logo")
     }
 }
