@@ -16,6 +16,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -38,91 +43,133 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.littlelemon.ui.theme.LittleLemonTheme
 
+val karlaFontFamily = FontFamily(
+    Font(R.font.karla_regular, FontWeight.Normal)
+)
+
 @Composable
 fun Onboarding(image: Painter, description: String, modifier: Modifier = Modifier) {
-    val karlaFontFamily = FontFamily(
-        Font(R.font.karla_regular, FontWeight.Normal)
-    )
     Column(
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier
+        Modifier.fillMaxHeight(),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.12f)
+        Column(
+            verticalArrangement = Arrangement.Top,
+            modifier = modifier
+                .verticalScroll(rememberScrollState())
+                .weight(0.9f, true)
         ) {
-            Image(painter = image,
-                contentDescription = description,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth(0.5f)
-            )
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            ) {
+                Image(
+                    painter = image,
+                    contentDescription = description,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = modifier
+                        .fillMaxWidth(0.5f)
+                )
+            }
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .background(colorResource(id = R.color.primary_green))
+                    .height(120.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.onboarding_prompt),
+                    fontSize = 25.sp,
+                    lineHeight = 25.sp,
+                    textAlign = TextAlign.Center,
+                    color = colorResource(id = R.color.highlight_white),
+                    fontFamily = karlaFontFamily
+                )
+            }
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .height(80.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.onboarding_information),
+                    fontSize = 20.sp,
+                    lineHeight = 20.sp,
+                    color = colorResource(id = R.color.highlight_black),
+                    fontFamily = karlaFontFamily,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+            FormLine(label = stringResource(id = R.string.onboarding_firstname))
+            FormLine(label = stringResource(id = R.string.onboarding_lastname))
+            FormLine(label = stringResource(id = R.string.onboarding_email))
         }
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.18f)
-                .background(colorResource(id = R.color.primary_green))
+        Column(
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier
+                .weight(0.1f, true)
         ) {
-            Text(
-                text = stringResource(id = R.string.onboarding_prompt),
-                fontSize = 25.sp,
-                lineHeight = 25.sp,
-                textAlign = TextAlign.Center,
-                color = colorResource(id = R.color.highlight_white),
-                fontFamily = karlaFontFamily
+            Button(
+                onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(colorResource(id = R.color.primary_yellow)),
+                shape = RoundedCornerShape(5.dp),
+                modifier = modifier
+                    .weight(0.1f, false)
+                    .fillMaxWidth()
+                    .padding(20.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.onboarding_register),
+                    fontSize = 20.sp,
+                    lineHeight = 20.sp,
+                    color = colorResource(id = R.color.highlight_black),
+                    fontFamily = karlaFontFamily,
+                    fontWeight = FontWeight.Bold
+                )
 
-            )
+            }
         }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
+    }
+}
+
+@Composable
+fun FormLine(label: String, modifier: Modifier = Modifier) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(20.dp, 20.dp, 20.dp, 0.dp)
+    ) {
+        Text(
+            text = label,
+            fontSize = 16.sp,
+            lineHeight = 16.sp,
+            color = colorResource(id = R.color.highlight_black),
+            textAlign = TextAlign.Left,
+            fontFamily = karlaFontFamily,
+            fontWeight = FontWeight.Bold
+        )
+    }
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(20.dp, 10.dp)
+    ) {
+        OutlinedTextField(
+            value = "",
+            onValueChange = {},
+            shape = RoundedCornerShape(5.dp),
+            modifier = modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.18f)
-                .padding(20.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.onboarding_information),
-                fontSize = 20.sp,
-                lineHeight = 20.sp,
-                color = colorResource(id = R.color.black),
-                fontFamily = karlaFontFamily,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp,0.dp)
-        ) {
-            Text(
-                text = stringResource(id = R.string.onboarding_firstname),
-                fontSize = 16.sp,
-                lineHeight = 16.sp,
-                color = colorResource(id = R.color.black),
-                textAlign = TextAlign.Left,
-                fontFamily = karlaFontFamily,
-                fontWeight = FontWeight.Bold
-            )
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp,5.dp)
-        ) {
-            OutlinedTextField(
-                value = "",
-                onValueChange = {},
-                modifier = Modifier
-                    .fillMaxWidth())
-        }
+                .height(40.dp))
     }
 }
 
