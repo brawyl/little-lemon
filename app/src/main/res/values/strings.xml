@@ -3,8 +3,11 @@
     <string name="onboarding_prompt">Let\'s get to know you</string>
     <string name="onboarding_information">Personal Information</string>
     <string name="onboarding_firstname">First name</string>
+    <string name="onboarding_firstname_placeholder">Tilly</string>
     <string name="onboarding_lastname">Last name</string>
+    <string name="onboarding_lastname_placeholder">Doe</string>
     <string name="onboarding_email">Email</string>
+    <string name="onboarding_email_placeholder">tillydoe@example.com</string>
     <string name="onboarding_register">Register</string>
     <string name="prefs_start_destination">start_destination</string>
 </resources>
