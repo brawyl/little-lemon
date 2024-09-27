@@ -1,9 +1,22 @@
 <resources>
     <string name="app_name">LittleLemon</string>
+    <string name="prefs_title">profile</string>
+
     <string name="onboarding_prompt">Let\'s get to know you</string>
     <string name="onboarding_information">Personal Information</string>
-    <string name="onboarding_firstname">First name</string>
-    <string name="onboarding_lastname">Last name</string>
-    <string name="onboarding_email">Email</string>
     <string name="onboarding_register">Register</string>
+
+    <string name="label_firstname">First name</string>
+    <string name="label_lastname">Last name</string>
+    <string name="label_email">Email</string>
+
+    <string name="example_firstname">Tilly</string>
+    <string name="example_lastname">Doe</string>
+    <string name="example_email">tillydoe@example.com</string>
+
+    <string name="profile_information">Profile Information</string>
+    <string name="profile_logout">Log out</string>
+
+    <string name="home_header">Home</string>
+
 </resources>
