@@ -1,6 +1,7 @@
 package com.example.littlelemon
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -52,6 +54,8 @@ val karlaFontFamily = FontFamily(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Onboarding(navController: NavHostController?) {
+    val prefs = LocalContext.current.getSharedPreferences(stringResource(id = R.string.prefs_title), Context.MODE_PRIVATE)
+
     var isValid by remember { mutableStateOf(false) }
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -73,6 +77,12 @@ fun Onboarding(navController: NavHostController?) {
                         scope.launch {
                             snackbarHostState.showSnackbar("Registration successful!")
                         }
+
+                        prefs.edit().putString("firstname", firstName).apply()
+                        prefs.edit().putString("lastname", lastName).apply()
+                        prefs.edit().putString("email", email).apply()
+                        prefs.edit().putString("destination", Home.route).apply()
+
                         navController?.navigate(Home.route)
                     } else {
                         scope.launch {

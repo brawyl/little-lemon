@@ -1,5 +1,7 @@
 package com.example.littlelemon
 
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -33,11 +36,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Profile(navController: NavHostController?) {
+    val prefs = LocalContext.current.getSharedPreferences(stringResource(id = R.string.prefs_title), Context.MODE_PRIVATE)
     Scaffold(
         floatingActionButton = {
             Button(
                 onClick =
                 {
+                    prefs.edit().clear().apply()
                     navController?.navigate(Onboarding.route)
                 },
                 colors = ButtonDefaults.buttonColors(colorResource(id = R.color.primary_yellow)),
@@ -69,15 +74,15 @@ fun Profile(navController: NavHostController?) {
             HeaderRow(label = stringResource(id = R.string.profile_information))
             InfoRow(
                 label = stringResource(id = R.string.label_firstname),
-                content = stringResource(id = R.string.example_firstname)
+                content = prefs.getString("firstname", "") ?: stringResource(id = R.string.example_firstname)
             )
             InfoRow(
                 label = stringResource(id = R.string.label_lastname),
-                content = stringResource(id = R.string.example_lastname)
+                content = prefs.getString("lastname", "") ?: stringResource(id = R.string.example_lastname)
             )
             InfoRow(
                 label = stringResource(id = R.string.label_email),
-                content = stringResource(id = R.string.example_email)
+                content = prefs.getString("email", "") ?: stringResource(id = R.string.example_email)
             )
         }
     }

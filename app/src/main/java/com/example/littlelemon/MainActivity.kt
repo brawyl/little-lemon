@@ -1,6 +1,7 @@
 package com.example.littlelemon
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,8 +14,8 @@ import androidx.navigation.compose.rememberNavController
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val sharedPrefs = this.getPreferences(Context.MODE_PRIVATE) ?: null
-        val startDestination = sharedPrefs?.getString(getString(R.string.prefs_start_destination), Onboarding.route) ?: Home.route
+        val sharedPrefs = this.getSharedPreferences(getString(R.string.prefs_title), Context.MODE_PRIVATE)
+        val startDestination = sharedPrefs?.getString("destination", Onboarding.route) ?: Onboarding.route
         setContent {
             val navController = rememberNavController()
 
