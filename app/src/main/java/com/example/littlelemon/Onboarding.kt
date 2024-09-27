@@ -39,10 +39,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 val karlaFontFamily = FontFamily(
@@ -51,7 +51,7 @@ val karlaFontFamily = FontFamily(
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Onboarding(navController: NavHostController) {
+fun Onboarding(navController: NavHostController?) {
     var isValid by remember { mutableStateOf(false) }
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -73,7 +73,7 @@ fun Onboarding(navController: NavHostController) {
                         scope.launch {
                             snackbarHostState.showSnackbar("Registration successful!")
                         }
-                        navController.navigate(Home.route)
+                        navController?.navigate(Home.route)
                     } else {
                         scope.launch {
                             snackbarHostState.showSnackbar("Registration unsuccessful. Please enter all data.")
@@ -97,7 +97,7 @@ fun Onboarding(navController: NavHostController) {
             }
         },
         floatingActionButtonPosition = FabPosition.Center
-    ) { contentPadding ->
+    ) { _ ->
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
@@ -106,55 +106,10 @@ fun Onboarding(navController: NavHostController) {
                 .padding(0.dp, 0.dp, 0.dp, 80.dp)
         ) {
             Column {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.logo),
-                        contentDescription = "Little Lemon Logo",
-                        contentScale = ContentScale.FillWidth,
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(colorResource(id = R.color.primary_green))
-                        .height(120.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.onboarding_prompt),
-                        fontSize = 25.sp,
-                        lineHeight = 25.sp,
-                        textAlign = TextAlign.Center,
-                        color = colorResource(id = R.color.highlight_white),
-                        fontFamily = karlaFontFamily
-                    )
-                }
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp)
-                        .height(60.dp)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.onboarding_information),
-                        fontSize = 20.sp,
-                        lineHeight = 20.sp,
-                        color = colorResource(id = R.color.highlight_black),
-                        fontFamily = karlaFontFamily,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                LabelRow(stringResource(id = R.string.onboarding_firstname))
+                LogoRow()
+                OnboardingHeroRow(label = stringResource(id = R.string.onboarding_prompt))
+                HeaderRow(label = stringResource(id = R.string.onboarding_information))
+                LabelRow(stringResource(id = R.string.label_firstname))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -168,7 +123,7 @@ fun Onboarding(navController: NavHostController) {
                             firstName = input
                             isValid = input.isNotEmpty()
                         },
-                        placeholder = { Text(text = stringResource(id = R.string.onboarding_firstname_placeholder)) },
+                        placeholder = { Text(text = stringResource(id = R.string.example_firstname)) },
                         isError = firstName.isNotEmpty(),
                         shape = RoundedCornerShape(5.dp),
                         singleLine = true,
@@ -176,7 +131,7 @@ fun Onboarding(navController: NavHostController) {
                             .fillMaxWidth()
                     )
                 }
-                LabelRow(stringResource(id = R.string.onboarding_lastname))
+                LabelRow(stringResource(id = R.string.label_lastname))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -190,7 +145,7 @@ fun Onboarding(navController: NavHostController) {
                             lastName = input
                             isValid = input.isNotEmpty()
                         },
-                        placeholder = { Text(text = stringResource(id = R.string.onboarding_lastname_placeholder)) },
+                        placeholder = { Text(text = stringResource(id = R.string.example_lastname)) },
                         isError = lastName.isNotEmpty(),
                         shape = RoundedCornerShape(5.dp),
                         singleLine = true,
@@ -198,7 +153,7 @@ fun Onboarding(navController: NavHostController) {
                             .fillMaxWidth()
                     )
                 }
-                LabelRow(stringResource(id = R.string.onboarding_email))
+                LabelRow(stringResource(id = R.string.label_email))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -212,7 +167,7 @@ fun Onboarding(navController: NavHostController) {
                             email = input
                             isValid = input.isNotEmpty()
                         },
-                        placeholder = { Text(text = stringResource(id = R.string.onboarding_email_placeholder)) },
+                        placeholder = { Text(text = stringResource(id = R.string.example_email)) },
                         isError = lastName.isNotEmpty(),
                         shape = RoundedCornerShape(5.dp),
                         singleLine = true,
@@ -222,6 +177,66 @@ fun Onboarding(navController: NavHostController) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun LogoRow() {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "Little Lemon Logo",
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+        )
+    }
+}
+
+@Composable
+fun OnboardingHeroRow(label: String,) {
+    Row(
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(colorResource(id = R.color.primary_green))
+            .height(120.dp)
+    ) {
+        Text(
+            text = label,
+            fontSize = 25.sp,
+            lineHeight = 25.sp,
+            textAlign = TextAlign.Center,
+            color = colorResource(id = R.color.highlight_white),
+            fontFamily = karlaFontFamily
+        )
+    }
+}
+
+@Composable
+fun HeaderRow(label: String,) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
+            .height(60.dp)
+    ) {
+        Text(
+            text = label,
+            fontSize = 20.sp,
+            lineHeight = 20.sp,
+            color = colorResource(id = R.color.highlight_black),
+            fontFamily = karlaFontFamily,
+            fontWeight = FontWeight.Bold
+        )
     }
 }
 
@@ -243,4 +258,10 @@ fun LabelRow(label: String, modifier: Modifier = Modifier) {
             fontWeight = FontWeight.Bold
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun OnboardingPreview() {
+    Onboarding(null)
 }
