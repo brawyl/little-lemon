@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val sharedPrefs = this.getPreferences(Context.MODE_PRIVATE) ?: null
-        val startDestination = sharedPrefs?.getString(getString(R.string.prefs_start_destination), Onboarding.route) ?: Onboarding.route
+        val startDestination = sharedPrefs?.getString(getString(R.string.prefs_start_destination), Onboarding.route) ?: Home.route
         setContent {
             val navController = rememberNavController()
 

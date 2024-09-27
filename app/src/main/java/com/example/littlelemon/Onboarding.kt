@@ -1,33 +1,22 @@
 package com.example.littlelemon
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.telecom.Call.Details
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -38,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 val karlaFontFamily = FontFamily(
@@ -72,17 +61,22 @@ fun Onboarding(navController: NavHostController) {
 
     Scaffold(
         snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState)
+            SnackbarHost(
+                hostState = snackbarHostState
+            )
         },
         floatingActionButton = {
             Button(
                 onClick =
                 {
                     if (isValid) {
+                        scope.launch {
+                            snackbarHostState.showSnackbar("Registration successful!")
+                        }
                         navController.navigate(Home.route)
                     } else {
                         scope.launch {
-                            snackbarHostState.showSnackbar("You must fill out all fields to continue.")
+                            snackbarHostState.showSnackbar("Registration unsuccessful. Please enter all data.")
                         }
                     }
                 },
@@ -160,7 +154,7 @@ fun Onboarding(navController: NavHostController) {
                         fontWeight = FontWeight.Bold
                     )
                 }
-                FormLabel(stringResource(id = R.string.onboarding_firstname))
+                LabelRow(stringResource(id = R.string.onboarding_firstname))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -182,7 +176,7 @@ fun Onboarding(navController: NavHostController) {
                             .fillMaxWidth()
                     )
                 }
-                FormLabel(stringResource(id = R.string.onboarding_lastname))
+                LabelRow(stringResource(id = R.string.onboarding_lastname))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -204,7 +198,7 @@ fun Onboarding(navController: NavHostController) {
                             .fillMaxWidth()
                     )
                 }
-                FormLabel(stringResource(id = R.string.onboarding_email))
+                LabelRow(stringResource(id = R.string.onboarding_email))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
@@ -232,7 +226,7 @@ fun Onboarding(navController: NavHostController) {
 }
 
 @Composable
-fun FormLabel(label: String, modifier: Modifier = Modifier) {
+fun LabelRow(label: String, modifier: Modifier = Modifier) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
