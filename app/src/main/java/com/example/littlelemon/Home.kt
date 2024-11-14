@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalGlideComposeApi::class)
+
 package com.example.littlelemon
 
 import android.widget.ImageButton
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -55,6 +58,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.bumptech.glide.integration.compose.placeholder
 
 val markaziFontFamily = FontFamily(
     Font(R.font.markazitext_regular, FontWeight.Normal)
@@ -179,7 +185,58 @@ fun Home(navController: NavHostController?) {
                     )
                 }
             }
+            MenuItems()
         }
+    }
+}
+
+@Composable
+fun MenuItems() {
+    Column {
+        MenuItem(
+            "Greek Salad",
+            "The famous greek salad of crispy lettuce, peppers, olives, our Chicago.",
+            "10",
+            "https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/greekSalad.jpg?raw=true"
+            )
+    }
+}
+
+@Composable
+fun MenuItem(title: String, description: String, price: String, image: String) {
+    Column(
+        modifier = Modifier
+            .padding(20.dp)
+    ) {
+        Text(
+            text = title,
+
+        )
+        Row {
+            Column(
+                modifier = Modifier
+                .fillMaxWidth(0.75f)
+            ){
+                Text(
+                    text = description
+                )
+                Text(
+                    text = price
+                )
+            }
+            Column {
+                GlideImage(
+                    model = image,
+                    contentDescription = title,
+                    loading = placeholder(R.drawable.hero),
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .aspectRatio(1f)
+                )
+            }
+        }
+
     }
 }
 

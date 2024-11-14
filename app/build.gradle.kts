@@ -76,4 +76,5 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.androidx.room.runtime)
     ksp("androidx.room:room-compiler:2.4.3")
+    implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
 }
