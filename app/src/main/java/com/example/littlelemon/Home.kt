@@ -2,65 +2,50 @@
 
 package com.example.littlelemon
 
-import android.widget.ImageButton
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.room.RoomDatabase
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import java.text.NumberFormat
+import java.util.Locale
 
 val markaziFontFamily = FontFamily(
     Font(R.font.markazitext_regular, FontWeight.Normal)
@@ -192,52 +177,116 @@ fun Home(navController: NavHostController?) {
 
 @Composable
 fun MenuItems() {
+    val menuItems = getMenuItems()
+    if (menuItems.isEmpty()) {
+        Text(
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(16.dp),
+            text = "The menu is empty"
+        )
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+        ) {
+            items(
+                items = menuItems,
+                itemContent = { menuItem ->
+                    MenuItem(
+                        menuItem.title,
+                        menuItem.description,
+                        menuItem.price,
+                        menuItem.image
+                    )
+                }
+            )
+        }
+    }
+//    Column {
+//        for (menuItem in menuItems) {
+//            MenuItem(
+//                menuItem.title,
+//                menuItem.description,
+//                menuItem.price,
+//                menuItem.image
+//            )
+//        }
+//    }
+}
+
+@Composable
+fun MenuItemsExample() {
     Column {
         MenuItem(
             "Greek Salad",
             "The famous greek salad of crispy lettuce, peppers, olives, our Chicago.",
             "10",
             "https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/greekSalad.jpg?raw=true"
-            )
+        )
     }
 }
 
 @Composable
 fun MenuItem(title: String, description: String, price: String, image: String) {
+    val priceFloat = price.toFloat()
+    val currencyFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale.getDefault())
+    val priceString = currencyFormat.format(priceFloat)
     Column(
         modifier = Modifier
             .padding(20.dp)
     ) {
         Text(
             text = title,
-
-        )
-        Row {
+            fontFamily = karlaFontFamily,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp
+            )
+        Row(
+            modifier = Modifier.height(IntrinsicSize.Max)
+        ) {
             Column(
                 modifier = Modifier
-                .fillMaxWidth(0.75f)
+                    .fillMaxWidth(0.75f)
             ){
                 Text(
-                    text = description
+                    text = description,
+                    fontFamily = karlaFontFamily,
+                    fontSize = 14.sp,
+                    maxLines = 2,
+                    overflow =TextOverflow.Ellipsis,
+                    modifier = Modifier
+                        .padding(0.dp, 14.dp, 0.dp, 0.dp)
                 )
                 Text(
-                    text = price
+                    text = priceString,
+                    fontFamily = karlaFontFamily,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .padding(0.dp, 14.dp, 0.dp, 0.dp)
                 )
             }
-            Column {
+            Column(
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
                 GlideImage(
                     model = image,
                     contentDescription = title,
                     loading = placeholder(R.drawable.hero),
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .fillMaxWidth(1f)
+                        .fillMaxHeight()
                         .aspectRatio(1f)
                 )
             }
         }
-
     }
+    HorizontalDivider(
+        modifier = Modifier
+            .padding(20.dp, 0.dp)
+    )
 }
 
 @Preview(showBackground = true)
