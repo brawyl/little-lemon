@@ -31,7 +31,8 @@ private val client = HttpClient(Android) {
 }
 
 private val menuItemsLiveData = MutableLiveData<List<MenuItemNetwork>>()
-private var menuItemList: List<MenuItem> = emptyList()
+
+var menuItemList: List<MenuItem> = emptyList()
 
 class MainActivity : ComponentActivity() {
 
@@ -71,6 +72,7 @@ class MainActivity : ComponentActivity() {
 
             val menuItems by database.menuDao().getAllMenuItems()
                 .observeAsState(emptyList())
+
             menuItemList = menuItems
 
             Navigation(navController, startDestination)
@@ -84,11 +86,6 @@ class MainActivity : ComponentActivity() {
 
         return response.menu
     }
-}
-
-fun getMenuItems(): List<MenuItem> {
-    Log.d("getMenuItems", menuItemList.toString())
-    return menuItemList
 }
 
 @Preview(showBackground = true)
