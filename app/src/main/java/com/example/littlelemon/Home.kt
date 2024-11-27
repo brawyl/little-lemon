@@ -3,18 +3,23 @@
 package com.example.littlelemon
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -22,6 +27,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -35,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -54,6 +62,7 @@ import androidx.room.Room
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -77,6 +86,10 @@ fun Home(navController: NavHostController?) {
         ).build()
     }
     var searchPhrase by remember { mutableStateOf("") }
+    var filterCategory by remember { mutableStateOf("")}
+    val menuItems by database.menuDao().getAllMenuItems()
+        .observeAsState(emptyList())
+    var displayItems = menuItems
 
     Scaffold { _ ->
         Column(
@@ -203,17 +216,123 @@ fun Home(navController: NavHostController?) {
                     )
                 }
             }
-            val menuItems by database.menuDao().getAllMenuItems()
-                .observeAsState(emptyList())
-            if (searchPhrase.isNotEmpty()) {
-                MenuItems(
-                    menuItems.filter {
-                        it.title.contains(searchPhrase, ignoreCase = true)
-                    }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp, 10.dp)
+            ) {
+                Text(
+                    text = stringResource(id = R.string.home_delivery),
+                    fontSize = 20.sp,
+                    color = colorResource(id = R.color.highlight_black),
+                    fontFamily = karlaFontFamily,
+                    fontWeight = FontWeight.ExtraBold
                 )
-            } else {
-                MenuItems(menuItems)
             }
+            Row(
+                horizontalArrangement = Arrangement.SpaceAround,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(0.dp, 10.dp)
+                    .horizontalScroll(rememberScrollState())
+            ) {
+                Button(
+                    onClick =
+                    {
+                        filterCategory = "starters"
+                    },
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.primary_green_faded)),
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier
+                        .defaultMinSize(1.dp, 1.dp)
+                        .padding(20.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_starters),
+                        fontSize = 14.sp,
+                        color = colorResource(id = R.color.primary_green),
+                        fontFamily = karlaFontFamily,
+                        fontWeight = FontWeight.ExtraBold,
+                    )
+                }
+                Button(
+                    onClick =
+                    {
+                        filterCategory = "mains"
+                    },
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.primary_green_faded)),
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier
+                        .defaultMinSize(1.dp, 1.dp)
+                        .padding(20.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_mains),
+                        fontSize = 14.sp,
+                        color = colorResource(id = R.color.primary_green),
+                        fontFamily = karlaFontFamily,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+                Button(
+                    onClick =
+                    {
+                        filterCategory = "desserts"
+                    },
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.primary_green_faded)),
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier
+                        .defaultMinSize(1.dp, 1.dp)
+                        .padding(20.dp, 0.dp, 0.dp, 0.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_desserts),
+                        fontSize = 14.sp,
+                        color = colorResource(id = R.color.primary_green),
+                        fontFamily = karlaFontFamily,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+                Button(
+                    onClick =
+                    {
+                        filterCategory = "drinks"
+                    },
+                    colors = ButtonDefaults.buttonColors(colorResource(id = R.color.primary_green_faded)),
+                    shape = RoundedCornerShape(14.dp),
+                    modifier = Modifier
+                        .defaultMinSize(1.dp, 1.dp)
+                        .padding(20.dp, 0.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.home_drinks),
+                        fontSize = 12.sp,
+                        color = colorResource(id = R.color.primary_green),
+                        fontFamily = karlaFontFamily,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+            }
+            HorizontalDivider(
+                modifier = Modifier.padding(0.dp, 10.dp)
+            )
+            if (searchPhrase.isNotEmpty()) {
+                filterCategory = ""
+                displayItems = menuItems.filter {
+                    it.title.contains(searchPhrase, ignoreCase = true)
+                }
+            }
+            if (filterCategory.isNotEmpty()) {
+                searchPhrase = ""
+                displayItems = menuItems.filter {
+                    it.category.contains(filterCategory, ignoreCase = true)
+                }
+            }
+            if (searchPhrase.isEmpty() && filterCategory.isEmpty()) {
+                displayItems = menuItems
+            }
+            MenuItems(displayItems)
+
         }
     }
 }
@@ -225,7 +344,7 @@ fun MenuItems(menuItems: List<MenuItem>) {
             modifier = Modifier
                 .padding(20.dp)
         ) {
-            Text( text = "The menu is empty" )
+            Text( text = "The menu is empty." )
         }
     } else {
         Column(
