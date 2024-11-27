@@ -18,13 +18,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,9 +40,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,6 +76,8 @@ fun Home(navController: NavHostController?) {
             "menu.db"
         ).build()
     }
+    var searchPhrase by remember { mutableStateOf("") }
+
     Scaffold { _ ->
         Column(
             verticalArrangement = Arrangement.SpaceBetween,
@@ -169,20 +181,39 @@ fun Home(navController: NavHostController?) {
                         .background(colorResource(R.color.primary_green))
                         .padding(20.dp, 10.dp)
                 ) {
-                    Text(
-                        text = "search placeholder",
-                        fontSize = 20.sp,
-                        lineHeight = 20.sp,
-                        color = colorResource(id = R.color.highlight_white),
-                        fontFamily = karlaFontFamily,
-                        fontWeight = FontWeight.Bold
+                    TextField(
+                        value = searchPhrase,
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+                        onValueChange = {
+                            searchPhrase = it
+                        },
+                        placeholder = {
+                            Text(
+                                text = stringResource(id = R.string.example_search),
+                                fontSize = 16.sp,
+                                color = colorResource(id = R.color.highlight_black),
+                                fontFamily = karlaFontFamily
+                            )
+                        },
+                        leadingIcon = { Icon( imageVector = Icons.Default.Search, contentDescription = "") },
+                        singleLine = true,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(10.dp))
                     )
                 }
             }
             val menuItems by database.menuDao().getAllMenuItems()
                 .observeAsState(emptyList())
-            MenuItems(menuItems)
-//            MenuItemsExample()
+            if (searchPhrase.isNotEmpty()) {
+                MenuItems(
+                    menuItems.filter {
+                        it.title.contains(searchPhrase, ignoreCase = true)
+                    }
+                )
+            } else {
+                MenuItems(menuItems)
+            }
         }
     }
 }
@@ -210,22 +241,6 @@ fun MenuItems(menuItems: List<MenuItem>) {
                 )
             }
         }
-    }
-}
-
-@Composable
-fun MenuItemsExample() {
-    Column(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(20.dp)
-    ) {
-        MenuItem(
-            "Greek Salad",
-            "The famous greek salad of crispy lettuce, peppers, olives, our Chicago.",
-            "10",
-            "https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/greekSalad.jpg?raw=true"
-        )
     }
 }
 
