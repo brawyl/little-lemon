@@ -13,10 +13,16 @@
     <string name="example_firstname">Tilly</string>
     <string name="example_lastname">Doe</string>
     <string name="example_email">tillydoe@example.com</string>
+    <string name="example_search">Enter search phrase</string>
 
     <string name="profile_information">Profile Information</string>
     <string name="profile_logout">Log out</string>
 
     <string name="home_header">Home</string>
+    <string name="home_delivery">ORDER FOR DELIVERY!</string>
+    <string name="home_starters">Starters</string>
+    <string name="home_mains">Mains</string>
+    <string name="home_desserts">Desserts</string>
+    <string name="home_drinks">Drinks</string>
 
 </resources>
