@@ -6,7 +6,7 @@ This app was created by Brandon Wylie as the final project of the Meta Android D
 
 **Note:** The images for two menu items (Lemon Dessert and Grilled Fish) are just black squares from the official course repo. This is not a bug from this project, but an issue in the course content.
 
-Tachnology stack: Android, Kotlin.
+Technology stack: Android, Kotlin.
 
 ## Wireframe
 ![The wireframe of the app home screen, designed in Figma.](wireframe.png)
